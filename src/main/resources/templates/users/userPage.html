@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User page</title>
+    <style>
+        .table {
+            width: 100%;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .table thead th {
+            padding: 10px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 20px;
+            text-align: left;
+            color: #444441;
+            border-top: 2px solid #716561;
+            border-bottom: 2px solid #716561;
+        }
+
+        .table tbody td {
+            padding: 10px;
+            font-size: 14px;
+            line-height: 20px;
+            color: #444441;
+            border-top: 1px solid #716561;
+        }
+
+    </style>
+</head>
+<body>
+
+<table border="1" class="table">
+    <caption class="-summary">Your account information</caption>
+
+    <tr>
+        <th>Id</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Role</th>
+    </tr>
+    <tr th:object ="${user}">
+        <td th:utext="${user.getId()}">id</td>
+        <td th:utext="${user.getFirstName()}">first_name</td>
+        <td th:utext="${user.getLastName()}">last_name</td>
+        <td th:utext="${user.getAge()}">age</td>
+        <td th:utext="${user.getEmail()}">email</td>
+        <td th:utext="${user.rolesToString()}">role</td>
+    </tr>
+</table>
+<form>
+    <input class="position" type="button" value="Logout" onclick=location.href="/logout">
+</form>
+</body>
+</html>
