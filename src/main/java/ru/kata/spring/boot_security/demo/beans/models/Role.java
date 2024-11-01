@@ -13,15 +13,14 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "role")
+    @Column(name = "role",nullable = false)
     private String role;
 
     public Role() {
 
     }
 
-    public Role(int id,String role) {
-        this.id = id;
+    public Role(String role) {
         this.role = role;
     }
 
