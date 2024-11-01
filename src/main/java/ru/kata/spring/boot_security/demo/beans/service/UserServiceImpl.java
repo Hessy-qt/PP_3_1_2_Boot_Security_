@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.beans.models.Role;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         for (Role role : user.getRoles()) {
             roles.add(roleRepository.findById(role.getId()).orElseThrow());
         }
-        user.setPassword(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRoles(roles);
         usersRepository.save(user);
     }
@@ -54,7 +54,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public void updateUser(int id, User user) {
+    public void updateUser(int id, User user,Set<Role> roles) {
+        user.getRoles().clear();
+        user.getRoles().addAll(roles);
         User userToUpdate = usersRepository.findById(id).get();
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
@@ -64,16 +66,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         usersRepository.save(userToUpdate);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User findByEmail(String email) {
         return usersRepository.findByEmail(email);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User findById(int id) {
         return usersRepository.findById(id).get();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = usersRepository.findByEmail(username);

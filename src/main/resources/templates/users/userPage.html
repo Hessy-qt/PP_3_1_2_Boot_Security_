@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>User page</title>
@@ -56,5 +56,8 @@
 <form>
     <input class="position" type="button" value="Logout" onclick=location.href="/logout">
 </form>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a href="/admin">Admin</a>
+</div>
 </body>
 </html>

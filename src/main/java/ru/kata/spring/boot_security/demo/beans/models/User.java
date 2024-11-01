@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.beans.models;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -29,7 +30,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
@@ -103,7 +104,7 @@ public class User implements UserDetails {
     public String rolesToString(){
         StringBuilder roles = new StringBuilder();
        for(Role role:this.roles){
-           roles.append(role.toString().replaceAll("^ROLE_|\\d+$", "").trim());
+           roles.append((role.toString()+ " ").replaceAll("^ROLE_|\\d+$", ""));
        }
        return roles.toString();
     }
