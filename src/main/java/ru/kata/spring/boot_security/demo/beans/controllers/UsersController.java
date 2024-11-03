@@ -39,8 +39,7 @@ public class UsersController {
 
     @GetMapping("/user")
     public String showUserForm(Model model, Principal principal) {
-        User foundUser = userService.findByEmail(principal.getName());
-        model.addAttribute("user", foundUser);
+        model.addAttribute("user", userService.findByEmail(principal.getName()));
         return "/users/userPage";
     }
 
@@ -53,15 +52,14 @@ public class UsersController {
 
     @PostMapping("/admin/editUserPage")
     public String showUserEditPage(@RequestParam("id") int id, Model model) {
-        User foundUser = userService.findById(id);
-        model.addAttribute("user", foundUser);
+        model.addAttribute("user", userService.findById(id));
         model.addAttribute("roles", roleService.findAll());
         return "/admin/editUserPage";
     }
 
     @PostMapping("/admin/editUser")
     public String editUser(@ModelAttribute User user, @RequestParam Set<Role> roles) {
-        userService.updateUser(user.getId(), user, roles);
+        userService.updateUser(user, roles);
         return "redirect:/admin";
     }
 
